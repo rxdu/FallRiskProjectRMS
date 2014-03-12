@@ -50,18 +50,6 @@ INSERT INTO `articles` (`artid`, `title`, `content`, `pageid`, `index`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `authkey`
---
-
-CREATE TABLE IF NOT EXISTS `authkey` (
-  `authkey` varchar(255) NOT NULL COMMENT 'Secret authentication key for rosauth.'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Holds the secret key for rosauth.';
-
-INSERT INTO `authkey` (`authkey`) VALUES (MD5(RAND()));
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `conditions`
 --
 
@@ -362,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `study_logs` (
   `logid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for the log entry.',
   `expid` int(11) NOT NULL COMMENT 'Unique identifier for the experiment.',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp for the entry.',
-  `entry` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'The log entry.',
+  `entry` varchar(255) NOT NULL COMMENT 'The log entry.',
   PRIMARY KEY (`logid`),
   KEY `expid` (`expid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='A table to hold log information during studies.' AUTO_INCREMENT=1 ;
@@ -410,7 +398,7 @@ CREATE TABLE IF NOT EXISTS `version` (
 --
 
 INSERT INTO `version` (`version`) VALUES
-('0.3.1');
+('0.3.0');
 
 -- --------------------------------------------------------
 

@@ -46,6 +46,11 @@ class fall_risk
                 'No 2D Navaigation settings found.',
                 $re->get_user_account()
             );
+        } else if (!$sensorService = $re->get_widgets_by_name('Sensor Service')) {
+            robot_environments::create_error_page(
+                'Could not find definition for Sensor service.',
+                $re->get_user_account()
+            );
         } else if (!$re->authorized()) {
             robot_environments::create_error_page(
                 'Invalid experiment for the current user.', 
@@ -65,9 +70,7 @@ class fall_risk
             // we will also need the map
             $widget = widgets::get_widget_by_table('maps');
             $map = widgets::get_widget_instance_by_widgetid_and_id(
-                $widget['widgetid'], $nav[0]['mapid']
-            );
-
+                $widget['widgetid'], $nav[0]['mapid']);
 
             // here we can spit out the HTML for our interface ?>
 <!doctype html>
@@ -129,7 +132,7 @@ function start() {
       width : 400,
       height : 300,
       quality : 35,
-      topic : '/camera/rgb/image_raw'
+      topic : <?php echo $topics?>
     });
 
  // initialize the teleop
@@ -160,7 +163,7 @@ var mapViewer = new ROS2D.Viewer({
   });
 
 	//Shift the canvas to display entire map
-	mapViewer.shift(0,18.65);
+	mapViewer.shift(13.8,21.7);
 
  // create a UI slider using JQuery UI
     $('#quality-slider').slider({
@@ -174,7 +177,7 @@ var mapViewer = new ROS2D.Viewer({
         // Scale the quality.
     //    reloadVideo(ui.value);
 	main.quality = ui.value;
-	main.changeStream('/camera/rgb/image_raw');
+	main.changeStream(<?php echo $topics?>);
       }
     });
     // set the initial quality
@@ -201,64 +204,67 @@ var mapViewer = new ROS2D.Viewer({
 
   }
 
-function setImage(){
-setInterval(function getLuminosity(){
-   var lightingCondition = new ROSLIB.Topic({
-	ros : ros,
-	name : '/sensors/luminosity',
-	type : 'std_msgs/Float64'
-    });
+function getChecklistStatus(){ 
+	setInterval(function getLuminosity(){
+	  var checklistStatus = new ROSLIB.Service({
+	    ros : ros,
+	    name : '<?php echo $sensorService[0]['topic']?>',
+	    serviceType : '<?php echo $sensorService[0]['servicetype']?>'
+	  });
 
-   lightingCondition.subscribe(function(message) {
-//	var imageSource = message.data>=300?'../img/green.jpg':'../img/red.jpg'; 
-        document.getElementById('sensorInfo').src="../img/red.jpg";
-   	lightingCondition.unsubscribe();
-   });
-},5000); 
+	  var request = new ROSLIB.ServiceRequest({});
+
+	  checklistStatus.callService(request, function(result) {
+	   var imageSource = result.luminosity >= 200.00?'../img/green.jpg':(result.luminosity >= 100.00?'../img/yellow.jpg':'../img/red.jpg');  
+  	   document.getElementById('luminositySensorInfo').src=imageSource;
+// document.getElementById('sensorData').innerHTML = result.luminosity;
+ 	 });
+
+	},5000); 
 }
 </script>
 </head>
 
-<body onload="start(); setImage();">
+<body onload="start(); getChecklistStatus();">
 <div class="container">
   <header class="sixteen columns">
    <table style="width:1050px;"><tr> <td style="vertical-align:middle;"><div id="logo" >
       <h1>In-home environment screening for Fall Risk</h1>
       <h2>using turtlebot</h2>
     </div></td><td style="vertical-align:middle;width:150px">
-    <img src="../img/logoModified.png" width="170" height="73" alt=""/>
+    <img src="../img/logoModified.png" width="190" height="73" alt=""/>
 </td></tr></table>
     <hr/>
   </header>
 
     <div id="overview" class="sixteen columns">
 <table><tr>
-<td nowrap style="width:25%"><ul>
-<li>Common</li>
-<li>Lighting condition &nbsp&nbsp&nbsp<img src= "../img/green.jpg" id="sensorInfo" onclick="getLuminosity()" width=15 heigth=15> </li>
-<li>wires/cords close to walls</li>
-<li>common walkways devoid of furniture</li>
+<td nowrap style="width:30%"><ul>
+<li><strong>Common</strong></li>
+<li><img src= "../img/green.jpg" id="luminositySensorInfo" width=15 heigth=15> &nbsp&nbsp&nbspLighting condition <div id = 'sensorData' /> </li>
+<li><img src= "../img/yellow.jpg" id="wiresInfo" width=15 heigth=15> &nbsp&nbsp&nbspwires/cords close to walls</li>
+<li><img src= "../img/yellow.jpg" id="freeWalkwaysInfo" width=15 heigth=15> &nbsp&nbsp&nbspcommon walkways devoid of furniture</li>
 </ul></td>
 <td nowrap style="width:25%"><ul>
-<li>Stairs</li>
+<li><strong>Stairs</strong></li>
 <li>bottom step clearly marked</li>
 <li>steps have risers</li>
 <li>secure and visible railing</li>
 </ul></td>
-<td nowrap style="width:25%"><ul>
-<li>Bathroom</li>
+<td nowrap style="width:20%"><ul>
+<li><strong>Bathroom</strong></li>
 <li>Grab bars in bath/toilet</li>
 <li>shower chair</li>
 <li>raised toilet seat</li>
 </ul></td>
 <td nowrap style="width:25%"><ul>
-<li>Bedroom</li>
+<li><strong>Bedroom</strong></li>
 <li>enough room between side of bed and wall</li>
 <li>clear path from bed to bathroom</li>
 <li>reasonable bed height</li>
 </ul></td>
 </tr></table>
-
+<hr />
     <table>
       <tr><td><h4 align="center">2D Navigation Map</h4>
 <div id="nav2d" align=center> </div>       

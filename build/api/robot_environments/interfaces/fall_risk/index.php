@@ -163,7 +163,9 @@ var mapViewer = new ROS2D.Viewer({
   });
 
 	//Shift the canvas to display entire map
-	mapViewer.shift(13.8,21.7);
+//	mapViewer.shift(13.8,21.7); //ECE Lounge Map
+	mapViewer.shift(0,18.6); //RIVeR_Lab Map
+//	mapViewer.shift(17,11.8); //rdu apartment
 
  // create a UI slider using JQuery UI
     $('#quality-slider').slider({
@@ -189,7 +191,7 @@ var mapViewer = new ROS2D.Viewer({
       range : 'min',
       min : 0,
       max : 100,
-      value : 90,
+      value : 50,
       slide : function(event, ui) {
         // Change the speed label.
         $('#speed-label').html('Robot Speed: ' + ui.value + '%');
@@ -237,31 +239,31 @@ function getChecklistStatus(){
     <hr/>
   </header>
 
-    <div id="overview" class="sixteen columns">
+ <div id="overview" class="sixteen columns">
 <table><tr>
 <td nowrap style="width:30%"><ul>
 <li><strong>Common</strong></li>
 <li><img src= "../img/green.jpg" id="luminositySensorInfo" width=15 heigth=15> &nbsp&nbsp&nbspLighting condition <div id = 'sensorData' /> </li>
-<li><img src= "../img/yellow.jpg" id="wiresInfo" width=15 heigth=15> &nbsp&nbsp&nbspwires/cords close to walls</li>
-<li><img src= "../img/yellow.jpg" id="freeWalkwaysInfo" width=15 heigth=15> &nbsp&nbsp&nbspcommon walkways devoid of furniture</li>
+<li><img src= "../img/yellow.jpg" id="wiresInfo" width=15 heigth=15> &nbsp&nbsp&nbspWires/cords close to walls</li>
+<li><img src= "../img/yellow.jpg" id="freeWalkwaysInfo" width=15 heigth=15> &nbsp&nbsp&nbspCommon walkways devoid of furniture</li>
 </ul></td>
 <td nowrap style="width:25%"><ul>
 <li><strong>Stairs</strong></li>
-<li>bottom step clearly marked</li>
-<li>steps have risers</li>
-<li>secure and visible railing</li>
+<li><img src= "../img/yellow.jpg" id="bottomStepInfo" width=15 heigth=15> &nbsp&nbsp&nbspBottom step clearly marked</li>
+<li><img src= "../img/yellow.jpg" id="stepRisersInfo" width=15 heigth=15> &nbsp&nbsp&nbspSteps have risers</li>
+<li><img src= "../img/yellow.jpg" id="freeWalkwaysInfo" width=15 heigth=15> &nbsp&nbsp&nbspSecure and visible railing</li>
 </ul></td>
 <td nowrap style="width:20%"><ul>
 <li><strong>Bathroom</strong></li>
-<li>Grab bars in bath/toilet</li>
-<li>shower chair</li>
-<li>raised toilet seat</li>
+<li><img src= "../img/yellow.jpg" id="grabBarsInfo" width=15 heigth=15> &nbsp&nbsp&nbspGrab bars in bath/toilet</li>
+<li><img src= "../img/yellow.jpg" id="showerChairInfo" width=15 heigth=15> &nbsp&nbsp&nbspShower chair</li>
+<li><img src= "../img/yellow.jpg" id="toiletSeatInfo" width=15 heigth=15> &nbsp&nbsp&nbspRaised toilet seat</li>
 </ul></td>
 <td nowrap style="width:25%"><ul>
 <li><strong>Bedroom</strong></li>
-<li>enough room between side of bed and wall</li>
-<li>clear path from bed to bathroom</li>
-<li>reasonable bed height</li>
+<li><img src= "../img/yellow.jpg" id="bedSpaceInfo" width=15 heigth=15> &nbsp&nbsp&nbspEnough room between side of bed and wall</li>
+<li><img src= "../img/yellow.jpg" id="bedBathroomPathInfo" width=15 heigth=15> &nbsp&nbsp&nbspClear path from bed to bathroom</li>
+<li><img src= "../img/yellow.jpg" id="bedHeightInfo" width=15 heigth=15> &nbsp&nbsp&nbspReasonable bed height</li>
 </ul></td>
 </tr></table>
 <hr />

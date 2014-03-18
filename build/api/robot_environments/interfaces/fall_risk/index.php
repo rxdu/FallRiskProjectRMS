@@ -164,8 +164,9 @@ var mapViewer = new ROS2D.Viewer({
 
 	//Shift the canvas to display entire map
 //	mapViewer.shift(13.8,21.7); //ECE Lounge Map
-	mapViewer.shift(0,18.6); //RIVeR_Lab Map
+//	mapViewer.shift(0,18.6); //RIVeR_Lab Map
 //	mapViewer.shift(17,11.8); //rdu apartment
+        mapViewer.shift(17,3.55); //rdu apartment cropped
 
  // create a UI slider using JQuery UI
     $('#quality-slider').slider({
